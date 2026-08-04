@@ -36,9 +36,7 @@ function Arrow() {
 export default function Home() {
   return (
     <main>
-      <div className="announcement">
-        <span className="pulse" /> AUGUST COHORT · ENROLLMENT CLOSES AUGUST 7, 11:59 PM WAT
-      </div>
+      <div className="announcement"><span className="pulse" /><Countdown /></div>
 
       <nav className="nav shell" aria-label="Primary navigation">
         <a className="brand" href="#top" aria-label="Arcane Academy home">
@@ -231,3 +229,4 @@ export default function Home() {
   );
 }
 import Image from "next/image";
+import { Countdown } from "./Countdown";
