@@ -101,7 +101,7 @@ export default function Home() {
             <h3>AI WEBSITE<br />DEVELOPMENT</h3>
             <p>Plan, design and publish a database-powered website that works beautifully across devices.</p>
             <ul>
-              <li>August 8–22, 2026</li><li>Monday–Saturday</li><li>9:00–10:00 AM WAT</li><li>Laptop required</li>
+              <li>August 15–29, 2026</li><li>Monday–Saturday</li><li>9:00–10:00 AM WAT</li><li>Laptop required</li>
             </ul>
             <div className="price"><small>LIVE CLASS</small><strong>₦100,000</strong></div>
             <a className="button full" href={webLounge} target="_blank" rel="noreferrer">Join web dev lounge <Arrow /></a>
@@ -114,7 +114,7 @@ export default function Home() {
             <h3>AI ANDROID APP<br />DEVELOPMENT</h3>
             <p>Shape, build and test a functional Android app on your own phone using AI-powered workflows.</p>
             <ul>
-              <li>August 8–22, 2026</li><li>Monday–Saturday</li><li>11:00 AM–12:00 PM WAT</li><li>Laptop + Android phone</li>
+              <li>August 15–29, 2026</li><li>Monday–Saturday</li><li>11:00 AM–12:00 PM WAT</li><li>Laptop + Android phone</li>
             </ul>
             <div className="price"><small>LIVE CLASS</small><strong>₦100,000</strong></div>
             <a className="button full" href={androidLounge} target="_blank" rel="noreferrer">Join Android lounge <Arrow /></a>
@@ -145,7 +145,7 @@ export default function Home() {
               {androidDays.map(([num, title, text]) => <div className="lesson" key={num}><span>{num}</span><div><h4>{title}</h4><p>{text}</p></div></div>)}
             </div>
           </div>
-          <p className="curriculum-note">August 8 is your orientation and setup day. It is followed by two focused Monday–Saturday build weeks.</p>
+          <p className="curriculum-note">August 15 is your orientation and setup day. It is followed by two focused Monday–Saturday build weeks.</p>
         </div>
       </section>
 
@@ -204,13 +204,13 @@ export default function Home() {
           <details><summary>Are sessions recorded?<span>+</span></summary><p>No. The classes are live and are not recorded, so students should be available for their selected class time.</p></details>
           <details><summary>How do I receive my certificate?<span>+</span></summary><p>Attend at least 80% of the live sessions and complete the required assignments and final project.</p></details>
           <details><summary>How do enrollment and payment work?<span>+</span></summary><p>Join the course lounge, ask any questions, receive verified OPay payment details and get confirmed into the private class group.</p></details>
-          <details><summary>What is the refund policy?<span>+</span></summary><p>Payments are non-refundable once classes begin on August 8, 2026. Missed classes are also non-refundable.</p></details>
+          <details><summary>What is the refund policy?<span>+</span></summary><p>Payments are non-refundable once classes begin on August 15, 2026. Missed classes are also non-refundable.</p></details>
         </div>
       </section>
 
       <section className="final-cta">
         <div className="shell">
-          <span className="kicker">ENROLLMENT CLOSES AUGUST 7 · 11:59 PM WAT</span>
+          <span className="kicker">ENROLLMENT CLOSES AUGUST 14 · 11:59 PM WAT</span>
           <h2>YOUR IDEA IS<br />WAITING TO BE <em>BUILT.</em></h2>
           <p>Choose your class, enter the official lounge and take the first step toward your own working product.</p>
           <div className="final-actions"><a className="button button-light" href={webLounge} target="_blank" rel="noreferrer">Join web dev <Arrow /></a><a className="button button-outline" href={androidLounge} target="_blank" rel="noreferrer">Join Android dev <Arrow /></a></div>
