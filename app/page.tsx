@@ -103,7 +103,7 @@ export default function Home() {
             <ul>
               <li>August 15–29, 2026</li><li>Monday–Saturday</li><li>9:00–10:00 AM WAT</li><li>Laptop required</li>
             </ul>
-            <div className="price"><small>LIVE CLASS</small><strong>₦100,000</strong></div>
+            <div className="price"><small>LIVE CLASS</small><strong>₦35,000</strong></div>
             <a className="button full" href={webLounge} target="_blank" rel="noreferrer">Join web dev lounge <Arrow /></a>
             <span className="fine">The lounge is for enquiries and enrollment.</span>
           </article>
@@ -116,7 +116,7 @@ export default function Home() {
             <ul>
               <li>August 15–29, 2026</li><li>Monday–Saturday</li><li>11:00 AM–12:00 PM WAT</li><li>Laptop + Android phone</li>
             </ul>
-            <div className="price"><small>LIVE CLASS</small><strong>₦100,000</strong></div>
+            <div className="price"><small>LIVE CLASS</small><strong>₦55,000</strong></div>
             <a className="button full" href={androidLounge} target="_blank" rel="noreferrer">Join Android lounge <Arrow /></a>
             <span className="fine">The lounge is for enquiries and enrollment.</span>
           </article>
