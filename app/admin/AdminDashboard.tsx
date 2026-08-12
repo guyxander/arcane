@@ -29,6 +29,7 @@ export function AdminDashboard(props: {
   notifications: Row[];
   notes: Row[];
   tutorPayments: Row[];
+  audit: Row[];
 }) {
   const {
     profile,
@@ -41,6 +42,8 @@ export function AdminDashboard(props: {
     receipts,
     certificates,
     notifications,
+    tutorPayments,
+    audit,
   } = props;
   const router = useRouter(),
     search = useSearchParams(),
@@ -87,6 +90,15 @@ export function AdminDashboard(props: {
       router.refresh();
       return data;
     }
+  }
+  async function recordTutorPayment(form: HTMLFormElement) {
+    if (!db) return;
+    setBusy(true);
+    const values = Object.fromEntries(new FormData(form));
+    const { error } = await db.from("tutor_payments").insert({ tutor_id: values.tutor_id, enrollment_id: values.enrollment_id || null, amount: Number(values.amount), status: values.status, reference: values.reference || null, paid_at: values.status === "paid" ? new Date().toISOString() : null });
+    setBusy(false);
+    setMessage(error ? error.message : "Tutor payment saved");
+    if (!error) router.refresh();
   }
   function exportCsv() {
     const headers = [
@@ -179,6 +191,7 @@ export function AdminDashboard(props: {
                 )}
                 <PushButton />
               </Panel>
+              <Panel title="Recent audit activity">{audit.length ? audit.slice(0, 8).map((item) => <div className="notice" key={item.id}><b>{item.action}</b><span>{item.entity_type} · {new Date(item.created_at).toLocaleString()}</span></div>) : <Empty text="No recorded changes yet." />}</Panel>
             </div>
           </>
         )}
@@ -365,7 +378,7 @@ export function AdminDashboard(props: {
             ))}
           </Panel>
         )}
-        {tab === "Payments" && (
+        {tab === "Payments" && (<>
           <Panel title="Manual payment verification">
             <form
               className="inline-form"
@@ -428,7 +441,18 @@ export function AdminDashboard(props: {
               </div>
             ))}
           </Panel>
-        )}
+          <Panel title="Tutor course payments">
+            <form className="inline-form" onSubmit={(event) => { event.preventDefault(); recordTutorPayment(event.currentTarget); }}>
+              <select name="tutor_id" required><option value="">Choose tutor</option>{staff.filter((person) => person.role === "tutor" && person.status === "approved").map((person) => <option key={person.user_id} value={person.user_id}>{person.name || person.email}</option>)}</select>
+              <select name="enrollment_id"><option value="">No linked enrollment</option>{leads.map((lead) => <option key={lead.id} value={lead.id}>{lead.reference} · {lead.name}</option>)}</select>
+              <input name="amount" type="number" min="0" placeholder="Amount" required />
+              <select name="status"><option value="unpaid">Unpaid</option><option value="paid">Paid</option><option value="waived">Waived</option></select>
+              <input name="reference" placeholder="Payment reference" />
+              <button disabled={busy}>Save tutor payment</button>
+            </form>
+            {tutorPayments.map((payment) => <div className="admin-row" key={payment.id}><b>{payment.status}</b><span>{money.format(payment.amount)} · {payment.reference || "No reference"}</span></div>)}
+          </Panel>
+        </>)}
         {tab === "Certificates" && (
           <Panel title="Projects and certificates">
             {leads
