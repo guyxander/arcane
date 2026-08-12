@@ -85,6 +85,7 @@ export function EnrollmentFlow({
         ageRange: age,
         location,
         name: f.get("name"),
+        phone: f.get("phone"),
         whatsapp: f.get("whatsapp"),
         preferredSlots: chosen.map(
           (s) =>
@@ -271,6 +272,10 @@ export function EnrollmentFlow({
             <label>
               Full name
               <input name="name" required minLength={2} />
+            </label>
+            <label>
+              Phone number
+              <input name="phone" type="tel" required pattern="[+0-9 ()-]{7,}" placeholder="+234…" />
             </label>
             <label>
               WhatsApp phone number

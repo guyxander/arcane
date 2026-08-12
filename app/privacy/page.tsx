@@ -9,7 +9,7 @@ export default function Privacy() {
         <p>Last updated: August 12, 2026</p>
         <h2>Information we collect</h2>
         <p>
-          We collect the name, WhatsApp number, age range, location, course
+          We collect the name, phone number, WhatsApp number, age range, location, course
           preference, schedule preference and enrollment activity you submit. We
           also record aggregate page visits, device category, browser and
           operating system. We do not store raw visitor IP addresses or create

@@ -8,8 +8,8 @@ export async function POST(request: Request) {
   console.log(JSON.stringify({ level: "info", msg: "start", route: "/api/enrollments", requestId: request.headers.get("x-vercel-id") }));
   try {
     const body = await request.json();
-    const { course, packageType, ageRange, location, name, whatsapp, preferredSlots, slotId, consent } = body as { course: Course; packageType: Package; ageRange: AgeRange; location: string; name: string; whatsapp: string; preferredSlots: string[]; slotId?: string|null; consent: boolean };
-    if (!course || !packageType || !name?.trim() || !whatsapp?.trim() || !consent) return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+    const { course, packageType, ageRange, location, name, phone, whatsapp, preferredSlots, slotId, consent } = body as { course: Course; packageType: Package; ageRange: AgeRange; location: string; name: string; phone: string; whatsapp: string; preferredSlots: string[]; slotId?: string|null; consent: boolean };
+    if (!course || !packageType || !name?.trim() || !phone?.trim() || !whatsapp?.trim() || !consent) return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     const supabase = createPublicClient();
     if (!supabase) return NextResponse.json({ error: "Enrollment service is being configured" }, { status: 503 });
     const { data: catalog } = await supabase.rpc("get_catalog");
@@ -17,7 +17,7 @@ export async function POST(request: Request) {
     const computed = calculatePrice(course, packageType, ageRange, location, configuredBase);
     if (computed.kind === "unavailable") return NextResponse.json({ error: "Package unavailable" }, { status: 400 });
     const reference = `ARC-${new Date().getFullYear()}-${crypto.randomUUID().slice(0, 8).toUpperCase()}`;
-    const { error } = await supabase.rpc("submit_enrollment", { p_reference: reference, p_name: name.trim(), p_whatsapp: whatsapp.trim(), p_location: location, p_age_range: ageRange, p_course: course, p_package_type: packageType, p_preferred_slots: preferredSlots || [], p_quoted_amount: computed.kind === "price" ? computed.amount : null, p_price_status: computed.kind, p_slot_id: slotId || null });
+    const { error } = await supabase.rpc("submit_enrollment", { p_reference: reference, p_name: name.trim(), p_phone: phone.trim(), p_whatsapp: whatsapp.trim(), p_location: location, p_age_range: ageRange, p_course: course, p_package_type: packageType, p_preferred_slots: preferredSlots || [], p_quoted_amount: computed.kind === "price" ? computed.amount : null, p_price_status: computed.kind, p_slot_id: slotId || null });
     if (error) throw error;
     await notifyAdmins(supabase, "New enrollment application", "A new applicant is ready for review.");
     console.log(JSON.stringify({ level: "info", msg: "done", route: "/api/enrollments", ms: Date.now() - start, reference }));

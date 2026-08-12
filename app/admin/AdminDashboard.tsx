@@ -104,6 +104,7 @@ export function AdminDashboard(props: {
     const headers = [
       "reference",
       "name",
+      "phone",
       "whatsapp",
       "location",
       "age_range",
@@ -206,7 +207,7 @@ export function AdminDashboard(props: {
                   <div>
                     <b>{l.name}</b>
                     <small>
-                      {l.reference} · {l.whatsapp} · {l.location}
+                      {l.reference} · Phone: {l.phone} · WhatsApp: {l.whatsapp} · {l.location}
                     </small>
                     <span>
                       {l.course} · {l.package_type} ·{" "}
