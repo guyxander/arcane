@@ -27,7 +27,7 @@ export function Countdown() {
   }, []);
 
   if (timeLeft === undefined) return <span className="countdown-loading">AUGUST COHORT · ENROLLMENT CLOSES AUGUST 14, 11:59 PM WAT</span>;
-  if (timeLeft === null) return <strong className="countdown-closed">AUGUST COHORT · ENROLLMENT CLOSED</strong>;
+  if (timeLeft === null) return <strong className="countdown-closed">NEXT COHORT · ENROLLMENT NOW OPEN</strong>;
 
   const units = [[timeLeft.days, "DAYS"], [timeLeft.hours, "HRS"], [timeLeft.minutes, "MIN"], [timeLeft.seconds, "SEC"]] as const;
 

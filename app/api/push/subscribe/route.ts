@@ -1,0 +1,3 @@
+import { NextResponse } from "next/server";
+import { createClient } from "@/lib/supabase/server";
+export async function POST(request: Request) { const db=await createClient();if(!db)return NextResponse.json({error:"Unavailable"},{status:503});const {data:{user}}=await db.auth.getUser();if(!user)return NextResponse.json({error:"Unauthorized"},{status:401});const s=await request.json();const {error}=await db.from("push_subscriptions").upsert({user_id:user.id,endpoint:s.endpoint,p256dh:s.keys?.p256dh,auth:s.keys?.auth},{onConflict:"endpoint"});return error?NextResponse.json({error:error.message},{status:400}):NextResponse.json({ok:true}); }

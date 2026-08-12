@@ -1,0 +1,3 @@
+create function public.server_admin_push_subscriptions(p_token text) returns table(endpoint text,p256dh text,auth text) language sql stable security definer set search_path='' as $$ select ps.endpoint,ps.p256dh,ps.auth from public.push_subscriptions ps join public.staff_profiles sp on sp.user_id=ps.user_id where sp.status='approved' and sp.role in ('owner','admin') and encode(extensions.digest(p_token,'sha256'),'hex')='3c5b50f7198ed0d9a5b349e8ffdc3be89d6259432a76edbe7121eacc4c55c12f' $$;
+revoke all on function public.server_admin_push_subscriptions(text) from public;
+grant execute on function public.server_admin_push_subscriptions(text) to anon,authenticated;

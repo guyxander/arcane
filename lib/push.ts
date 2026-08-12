@@ -1,0 +1,3 @@
+import webpush from "web-push";
+import type { SupabaseClient } from "@supabase/supabase-js";
+export async function notifyAdmins(db:SupabaseClient,title:string,body:string,url="/admin"){const pub=process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY,priv=process.env.VAPID_PRIVATE_KEY,token=process.env.PUSH_SERVER_TOKEN;if(!pub||!priv||!token)return;webpush.setVapidDetails("mailto:okosaanthony@gmail.com",pub,priv);const {data}=await db.rpc("server_admin_push_subscriptions",{p_token:token});await Promise.allSettled((data||[]).map((s:{endpoint:string;p256dh:string;auth:string})=>webpush.sendNotification({endpoint:s.endpoint,keys:{p256dh:s.p256dh,auth:s.auth}},JSON.stringify({title,body,url}))));}

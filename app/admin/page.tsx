@@ -1,21 +1,8 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { AdminDashboard } from "./AdminDashboard";
-
-export const dynamic = "force-dynamic";
-
-export default async function Admin() {
-  const db = await createClient();
-  if (!db) return <main className="portal-page"><div className="auth-card"><h1>CRM setup required</h1><p>Connect Supabase to activate the Arcane CRM.</p></div></main>;
-  const { data: { user } } = await db.auth.getUser();
-  if (!user) redirect("/admin/login");
-  const { data: profile } = await db.from("staff_profiles").select("*").eq("user_id", user.id).single();
-  if (!profile || profile.status !== "approved") return <main className="portal-page"><div className="auth-card"><span className="flow-kicker">ACCESS REQUEST RECEIVED</span><h1>Approval pending</h1><p>Your staff request is waiting for an Arcane Academy administrator. Requests expire after one month.</p></div></main>;
-  const [enrollments, visits, slots, staff] = await Promise.all([
-    db.from("enrollments").select("*").order("created_at", { ascending: false }).limit(100),
-    db.from("visitor_events").select("visited_at,device_type,browser,os").order("visited_at", { ascending: false }).limit(10000),
-    db.from("availability_slots").select("*").order("starts_at"),
-    db.from("staff_profiles").select("user_id,name,email,role,status,created_at").order("created_at", { ascending: false }),
-  ]);
-  return <AdminDashboard profile={profile} leads={enrollments.data || []} visits={visits.data || []} slots={slots.data || []} staff={staff.data || []}/>;
-}
+export const dynamic="force-dynamic";
+export default async function Admin(){const db=await createClient();if(!db)return <main className="portal-page"><div className="auth-card"><h1>CRM setup required</h1></div></main>;const {data:{user}}=await db.auth.getUser();if(!user)redirect("/admin/login");const {data:profile}=await db.from("staff_profiles").select("*").eq("user_id",user.id).single();if(!profile||profile.status!=="approved")return <main className="portal-page"><div className="auth-card"><span className="flow-kicker">ACCESS REQUEST RECEIVED</span><h1>Approval pending</h1><p>An administrator must approve your staff account.</p></div></main>;
+ const [leads,visits,slots,staff,prices,payments,receipts,certificates,notifications,notes,tutorPayments]=await Promise.all([
+ db.from("enrollments").select("*").order("created_at",{ascending:false}).limit(500),db.from("visitor_events").select("visited_at,path,device_type,browser,os,referrer_domain").order("visited_at",{ascending:false}).limit(10000),db.from("availability_slots").select("*").order("starts_at"),db.from("staff_profiles").select("*").order("created_at",{ascending:false}),db.from("course_prices").select("*").order("course"),db.from("payments").select("*").order("created_at",{ascending:false}),db.from("receipts").select("*").order("issued_at",{ascending:false}),db.from("certificates").select("*").order("created_at",{ascending:false}),db.from("notifications").select("*").order("created_at",{ascending:false}).limit(50),db.from("lead_notes").select("*").order("created_at",{ascending:false}),db.from("tutor_payments").select("*").order("created_at",{ascending:false})]);
+ return <AdminDashboard profile={profile} leads={leads.data||[]} visits={visits.data||[]} slots={slots.data||[]} staff={staff.data||[]} prices={prices.data||[]} payments={payments.data||[]} receipts={receipts.data||[]} certificates={certificates.data||[]} notifications={notifications.data||[]} notes={notes.data||[]} tutorPayments={tutorPayments.data||[]}/>}

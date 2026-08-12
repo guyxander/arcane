@@ -22,11 +22,11 @@ const bases: Record<Course, Record<Exclude<Package, "physical">, number | null>>
 const moderate = ["lagos mainland", "port harcourt", "ibadan"];
 const higher = ["owerri", "enugu", "aba", "onitsha", "asaba", "warri", "benin", "kano", "other nigeria"];
 
-export function calculatePrice(course: Course, packageType: Package, age: AgeRange, location: string) {
+export function calculatePrice(course: Course, packageType: Package, age: AgeRange, location: string, configuredBase?: number | null) {
   if (packageType === "physical" || location === "outside nigeria") return { kind: "quote" as const };
-  const base = bases[course][packageType];
+  const base = configuredBase === undefined ? bases[course][packageType] : configuredBase;
   if (base === null) return { kind: "unavailable" as const };
-  if (packageType === "self_paced") return { kind: "price" as const, base, amount: 15000, discount: 0 };
+  if (packageType === "self_paced") return { kind: "price" as const, base, amount: base, discount: 0 };
   const ageDiscount = age === "18-24" ? 0.1 : 0;
   const regionDiscount = moderate.includes(location) ? 0.075 : higher.includes(location) ? 0.15 : 0;
   const discount = Math.min(0.25, ageDiscount + regionDiscount);
