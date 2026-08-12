@@ -1,5 +1,3 @@
-const webLounge = "https://chat.whatsapp.com/BXQNhEmGJqGItfK0HnYVtq";
-const androidLounge = "https://chat.whatsapp.com/I6vD29YM1fP2luU9xbPqHE";
 const selfPaced = "https://mahadum.vercel.app/courses/arcane-ai-website-development-93451f6f";
 
 const tools = ["CODEX", "STITCH", "SUPABASE", "GITHUB", "VERCEL"];
@@ -49,16 +47,16 @@ export default function Home() {
           <a href="#projects">Projects</a>
           <a href="#instructor">Instructor</a>
         </div>
-        <a className="button button-small" href="#courses">Choose a class <Arrow /></a>
+        <a className="button button-small" href="/enroll">Start enrollment <Arrow /></a>
       </nav>
 
       <section className="hero shell" id="top">
         <div className="hero-copy">
-          <div className="eyebrow"><span>ONLINE · AGES 10+</span><i /></div>
+          <div className="eyebrow"><span>ONLINE · AGES 18+</span><i /></div>
           <h1>DON&apos;T JUST USE<br />TECHNOLOGY.<br /><em>BUILD IT.</em></h1>
           <p>Turn your ideas into a real database-powered website or Android app with AI. No previous coding experience required.</p>
           <div className="hero-actions">
-            <a className="button" href="#courses">Explore live classes <Arrow /></a>
+            <a className="button" href="/enroll">Build your learning plan <Arrow /></a>
             <a className="text-button" href={selfPaced} target="_blank" rel="noreferrer">Prefer self-paced? <Arrow /></a>
           </div>
           <div className="hero-stats">
@@ -103,9 +101,9 @@ export default function Home() {
             <ul>
               <li>August 15–29, 2026</li><li>Monday–Saturday</li><li>9:00–10:00 AM WAT</li><li>Laptop required</li>
             </ul>
-            <div className="price"><small>LIVE CLASS</small><strong>₦35,000</strong></div>
-            <a className="button full" href={webLounge} target="_blank" rel="noreferrer">Join web dev lounge <Arrow /></a>
-            <span className="fine">The lounge is for enquiries and enrollment.</span>
+            <div className="price"><small>GROUP LIVE</small><strong>₦45,000</strong></div>
+            <a className="button full" href="/enroll">Choose your package <Arrow /></a>
+            <span className="fine">Group, personal, self-paced and physical options.</span>
           </article>
 
           <article className="course-card">
@@ -116,16 +114,16 @@ export default function Home() {
             <ul>
               <li>August 15–29, 2026</li><li>Monday–Saturday</li><li>11:00 AM–12:00 PM WAT</li><li>Laptop + Android phone</li>
             </ul>
-            <div className="price"><small>LIVE CLASS</small><strong>₦55,000</strong></div>
-            <a className="button full" href={androidLounge} target="_blank" rel="noreferrer">Join Android lounge <Arrow /></a>
-            <span className="fine">The lounge is for enquiries and enrollment.</span>
+            <div className="price"><small>GROUP LIVE</small><strong>₦60,000</strong></div>
+            <a className="button full" href="/enroll">Choose your package <Arrow /></a>
+            <span className="fine">Group, personal and physical options.</span>
           </article>
         </div>
 
         <div className="self-paced">
           <div><span className="kicker">LEARN ON YOUR SCHEDULE</span><h3>AI Website Development — Self-Paced</h3><p>Start anytime on Mahadum and learn at your own pace, with one month of WhatsApp support.</p></div>
-          <strong>₦50,000</strong>
-          <a className="button button-dark" href={selfPaced} target="_blank" rel="noreferrer">Start on Mahadum <Arrow /></a>
+          <strong>₦15,000</strong>
+          <a className="button button-dark" href="/enroll">Enroll self-paced <Arrow /></a>
         </div>
       </section>
 
@@ -200,10 +198,10 @@ export default function Home() {
       <section className="section faq shell">
         <div><span className="kicker">GOOD TO KNOW</span><h2>QUESTIONS,<br /><em>ANSWERED.</em></h2></div>
         <div className="faq-list">
-          <details><summary>Do I need coding experience?<span>+</span></summary><p>No. Both classes are designed for complete beginners ages 10 and above. Curiosity and willingness to practise matter most.</p></details>
+          <details><summary>Do I need coding experience?<span>+</span></summary><p>No. The classes are designed for adult beginners. Curiosity and willingness to practise matter most.</p></details>
           <details><summary>Are sessions recorded?<span>+</span></summary><p>No. The classes are live and are not recorded, so students should be available for their selected class time.</p></details>
-          <details><summary>How do I receive my certificate?<span>+</span></summary><p>Attend at least 80% of the live sessions and complete the required assignments and final project.</p></details>
-          <details><summary>How do enrollment and payment work?<span>+</span></summary><p>Join the course lounge, ask any questions, receive verified OPay payment details and get confirmed into the private class group.</p></details>
+          <details><summary>How do I receive my certificate?<span>+</span></summary><p>Complete your final project and receive approval from your assigned tutor. Certificates include a public verification number.</p></details>
+          <details><summary>How do enrollment and payment work?<span>+</span></summary><p>Submit your plan and preferred schedule. Our team will call you, confirm availability and provide the official bank account. Payment is verified manually.</p></details>
           <details><summary>What is the refund policy?<span>+</span></summary><p>Payments are non-refundable once classes begin on August 15, 2026. Missed classes are also non-refundable.</p></details>
         </div>
       </section>
@@ -212,15 +210,15 @@ export default function Home() {
         <div className="shell">
           <span className="kicker">ENROLLMENT CLOSES AUGUST 14 · 11:59 PM WAT</span>
           <h2>YOUR IDEA IS<br />WAITING TO BE <em>BUILT.</em></h2>
-          <p>Choose your class, enter the official lounge and take the first step toward your own working product.</p>
-          <div className="final-actions"><a className="button button-light" href={webLounge} target="_blank" rel="noreferrer">Join web dev <Arrow /></a><a className="button button-outline" href={androidLounge} target="_blank" rel="noreferrer">Join Android dev <Arrow /></a></div>
+          <p>Choose your course, learning package and preferred schedule. We’ll contact you to complete enrollment.</p>
+          <div className="final-actions"><a className="button button-light" href="/enroll">Start enrollment <Arrow /></a></div>
         </div>
       </section>
 
       <footer>
         <div className="shell footer-grid">
           <a className="brand" href="#top"><Image src="/arcane-logo.jpg" alt="" width={40} height={40} /><span>ARCANE<small>ACADEMY</small></span></a>
-          <p>Learn. Build. Ship.<br />Online classes for creators ages 10+.</p>
+          <p>Learn. Build. Ship.<br />Practical AI classes for adult creators.</p>
           <div><a href="https://wa.me/2349029840305" target="_blank" rel="noreferrer">WhatsApp: +234 902 984 0305</a><a href="mailto:okosaanthony@gmail.com">okosaanthony@gmail.com</a></div>
         </div>
         <div className="shell footer-bottom"><span>© 2026 Arcane Academy</span><span>Built for the next generation of creators.</span></div>
