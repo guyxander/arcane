@@ -91,6 +91,12 @@ export function AdminDashboard(props: {
       return data;
     }
   }
+  async function signOut() {
+    if (!db) return;
+    await db.auth.signOut();
+    router.replace("/admin/login");
+    router.refresh();
+  }
   async function recordTutorPayment(form: HTMLFormElement) {
     if (!db) return;
     setBusy(true);
@@ -152,8 +158,9 @@ export function AdminDashboard(props: {
             <h1>{tab}</h1>
           </div>
           <div className="staff-chip">
-            {profile.name}
-            <small>{profile.role}</small>
+            <span>{profile.name || profile.email}</span>
+            <small>{profile.email} · {profile.role}</small>
+            <button onClick={signOut}>Sign out</button>
           </div>
         </header>
         {message && (
