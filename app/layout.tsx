@@ -5,7 +5,8 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { AnalyticsTracker } from "./AnalyticsTracker";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : "http://localhost:3000"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://arcaneacademy.xyz"),
+  alternates: { canonical: "/" },
   title: "Arcane Academy | Build Websites & Android Apps with AI",
   description: "Beginner-friendly AI website and Android app development classes for adults. Build a real product with AI-assisted workflows.",
   icons: { icon: "/arcane-logo.jpg", shortcut: "/arcane-logo.jpg" },
