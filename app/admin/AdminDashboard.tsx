@@ -91,7 +91,14 @@ export function AdminDashboard(props: {
       p_payload: payload,
     });
     setBusy(false);
-    setMessage(error ? error.message : "Saved");
+    const detached = Number(data?.detached_enrollments || 0);
+    setMessage(
+      error
+        ? error.message
+        : name === "delete_slot" && detached
+          ? `Schedule deleted. ${detached} linked application${detached === 1 ? " was" : "s were"} kept and returned to unscheduled.`
+          : "Saved",
+    );
     if (!error) {
       router.refresh();
       return data;
@@ -383,7 +390,7 @@ export function AdminDashboard(props: {
                         className="button-danger"
                         disabled={busy}
                         onClick={async () => {
-                          if (!confirm(`Delete ${s.cohort_name}? This cannot be undone.`)) return;
+                          if (!confirm(`Delete ${s.cohort_name}? Linked applications will be kept and returned to unscheduled.`)) return;
                           const result = await action("delete_slot", { id: s.id });
                           if (result) setEditingSlotId(null);
                         }}
