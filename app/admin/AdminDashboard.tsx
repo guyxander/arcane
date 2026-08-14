@@ -49,7 +49,8 @@ export function AdminDashboard(props: {
     search = useSearchParams(),
     [tab, setTabState] = useState(search.get("tab") || "Overview"),
     [busy, setBusy] = useState(false),
-    [message, setMessage] = useState("");
+    [message, setMessage] = useState(""),
+    [editingSlotId, setEditingSlotId] = useState<string | null>(null);
   const db = createClient();
   const analytics = useMemo(() => {
     const today = new Date().toISOString().slice(0, 10),
@@ -80,7 +81,8 @@ export function AdminDashboard(props: {
     if (!db) return;
     setBusy(true);
     setMessage("");
-    const { data, error } = await db.rpc("admin_dashboard_action", {
+    const scheduleAction = name === "update_slot" || name === "delete_slot";
+    const { data, error } = await db.rpc(scheduleAction ? "admin_schedule_action" : "admin_dashboard_action", {
       p_action: name,
       p_payload: payload,
     });
@@ -90,6 +92,11 @@ export function AdminDashboard(props: {
       router.refresh();
       return data;
     }
+  }
+  function localDateTime(value: string) {
+    const date = new Date(value);
+    const pad = (part: number) => String(part).padStart(2, "0");
+    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
   }
   async function signOut() {
     if (!db) return;
@@ -330,19 +337,63 @@ export function AdminDashboard(props: {
               </form>
             </Panel>
             <Panel title="Published availability">
-              {slots.map((s) => (
-                <div className="admin-row" key={s.id}>
-                  <b>{s.cohort_name}</b>
-                  <span>
-                    {s.course} · {s.package_type} ·{" "}
-                    {new Date(s.starts_at).toLocaleString()} ·{" "}
-                    {s.enrolled_count}/{s.capacity}
-                  </span>
-                  <button onClick={() => action("toggle_slot", { id: s.id })}>
-                    {s.is_active ? "Disable" : "Enable"}
-                  </button>
-                </div>
-              ))}
+              {slots.length ? slots.map((s) =>
+                editingSlotId === s.id ? (
+                  <form
+                    className="admin-row schedule-editor"
+                    key={s.id}
+                    onSubmit={async (e) => {
+                      e.preventDefault();
+                      const values = Object.fromEntries(new FormData(e.currentTarget));
+                      const result = await action("update_slot", { id: s.id, ...values });
+                      if (result) setEditingSlotId(null);
+                    }}
+                  >
+                    <input name="cohort_name" defaultValue={s.cohort_name} placeholder="Cohort name" required />
+                    <select name="course" defaultValue={s.course}>
+                      <option value="web">Web</option>
+                      <option value="android">Android</option>
+                    </select>
+                    <select name="package_type" defaultValue={s.package_type}>
+                      <option value="group">Group</option>
+                      <option value="personal">Personal</option>
+                      <option value="physical">Physical</option>
+                    </select>
+                    <input name="starts_at" type="datetime-local" defaultValue={localDateTime(s.starts_at)} required />
+                    <input name="capacity" type="number" min={Math.max(1, s.enrolled_count)} defaultValue={s.capacity} required />
+                    <div className="row-actions">
+                      <button type="submit" disabled={busy}>Save changes</button>
+                      <button type="button" className="button-muted" onClick={() => setEditingSlotId(null)}>Cancel</button>
+                    </div>
+                  </form>
+                ) : (
+                  <div className="admin-row" key={s.id}>
+                    <b>{s.cohort_name}<small>{s.is_active ? "Available" : "Unavailable"}</small></b>
+                    <span>
+                      {s.course} · {s.package_type} ·{" "}
+                      {new Date(s.starts_at).toLocaleString()} ·{" "}
+                      {s.enrolled_count}/{s.capacity}
+                    </span>
+                    <div className="row-actions">
+                      <button onClick={() => setEditingSlotId(s.id)}>Edit</button>
+                      <button onClick={() => action("toggle_slot", { id: s.id })}>
+                        {s.is_active ? "Disable" : "Enable"}
+                      </button>
+                      <button
+                        className="button-danger"
+                        disabled={busy}
+                        onClick={async () => {
+                          if (!confirm(`Delete ${s.cohort_name}? This cannot be undone.`)) return;
+                          const result = await action("delete_slot", { id: s.id });
+                          if (result) setEditingSlotId(null);
+                        }}
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                )
+              ) : <Empty text="No schedules yet." />}
             </Panel>
           </>
         )}
