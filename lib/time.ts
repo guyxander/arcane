@@ -34,3 +34,10 @@ export function watLocalToTimestamp(value: unknown) {
   if (!local || /(?:Z|[+-]\d{2}:\d{2})$/i.test(local)) return local;
   return `${local.length === 16 ? `${local}:00` : local}+01:00`;
 }
+
+export function enrollmentDeadlineForCohort(value: string | Date) {
+  const cohortDate = toWATDateTimeLocal(value).slice(0, 10);
+  return new Date(
+    new Date(`${cohortDate}T00:00:00+01:00`).getTime() - 60_000,
+  ).toISOString();
+}

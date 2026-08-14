@@ -31,10 +31,27 @@ function Arrow() {
   return <span aria-hidden="true">↗</span>;
 }
 
-export default function Home() {
+export const dynamic = "force-dynamic";
+
+type PublicSlot = {
+  packageType: string;
+  startsAt: string;
+  status: string;
+  cohortName: string | null;
+};
+
+export default async function Home() {
+  const db = createPublicClient();
+  const { data: catalog } = db ? await db.rpc("get_catalog") : { data: null };
+  const closestCohort = ((catalog?.slots || []) as PublicSlot[])
+    .filter((slot) => slot.packageType === "group" && slot.status === "available")
+    .sort((a, b) => new Date(a.startsAt).getTime() - new Date(b.startsAt).getTime())[0];
+  const deadline = closestCohort ? enrollmentDeadlineForCohort(closestCohort.startsAt) : null;
+  const deadlineLabel = deadline ? formatWAT(deadline) : null;
+  const cohortName = closestCohort?.cohortName || "Next cohort";
   return (
     <main>
-      <div className="announcement"><span className="pulse" /><Countdown /></div>
+      <div className="announcement"><span className="pulse" /><Countdown deadline={deadline} deadlineLabel={deadlineLabel} cohortName={cohortName} /></div>
 
       <nav className="nav shell" aria-label="Primary navigation">
         <a className="brand" href="#top" aria-label="Arcane Academy home">
@@ -208,7 +225,7 @@ export default function Home() {
 
       <section className="final-cta">
         <div className="shell">
-          <span className="kicker">ENROLLMENT CLOSES AUGUST 14 · 11:59 PM WAT (GMT+1)</span>
+          <span className="kicker">{deadlineLabel ? `ENROLLMENT CLOSES ${deadlineLabel.toUpperCase()}` : "NEXT COHORT ENROLLMENT OPEN"}</span>
           <h2>YOUR IDEA IS<br />WAITING TO BE <em>BUILT.</em></h2>
           <p>Choose your course, learning package and preferred schedule. We’ll contact you to complete enrollment.</p>
           <div className="final-actions"><a className="button button-light" href="/enroll">Start enrollment <Arrow /></a></div>
@@ -228,3 +245,5 @@ export default function Home() {
 }
 import Image from "next/image";
 import { Countdown } from "./Countdown";
+import { createPublicClient } from "@/lib/supabase/public";
+import { enrollmentDeadlineForCohort, formatWAT } from "@/lib/time";

@@ -2,10 +2,9 @@
 
 import { useEffect, useState } from "react";
 
-const deadline = new Date("2026-08-14T23:59:00+01:00").getTime();
 type TimeLeft = { days: number; hours: number; minutes: number; seconds: number };
 
-function getTimeLeft(): TimeLeft | null {
+function getTimeLeft(deadline: number): TimeLeft | null {
   const difference = deadline - Date.now();
   if (difference <= 0) return null;
   return {
@@ -16,29 +15,42 @@ function getTimeLeft(): TimeLeft | null {
   };
 }
 
-export function Countdown() {
+export function Countdown({
+  deadline,
+  deadlineLabel,
+  cohortName,
+}: {
+  deadline: string | null;
+  deadlineLabel: string | null;
+  cohortName: string | null;
+}) {
   const [timeLeft, setTimeLeft] = useState<TimeLeft | null | undefined>(undefined);
 
   useEffect(() => {
-    const update = () => setTimeLeft(getTimeLeft());
+    if (!deadline) {
+      return;
+    }
+    const deadlineTime = new Date(deadline).getTime();
+    const update = () => setTimeLeft(getTimeLeft(deadlineTime));
     update();
     const interval = window.setInterval(update, 1_000);
     return () => window.clearInterval(interval);
-  }, []);
+  }, [deadline]);
 
-  if (timeLeft === undefined) return <span className="countdown-loading">AUGUST COHORT · ENROLLMENT CLOSES AUGUST 14, 11:59 PM WAT (GMT+1)</span>;
-  if (timeLeft === null) return <strong className="countdown-closed">NEXT COHORT · ENROLLMENT NOW OPEN</strong>;
+  if (!deadline) return <strong className="countdown-closed">NEXT COHORT · SCHEDULE COMING SOON</strong>;
+  if (timeLeft === undefined) return <span className="countdown-loading">{cohortName || "NEXT COHORT"} · ENROLLMENT CLOSES {deadlineLabel || "SOON"}</span>;
+  if (timeLeft === null) return <strong className="countdown-closed">{cohortName || "NEXT COHORT"} · ENROLLMENT CLOSED</strong>;
 
   const units = [[timeLeft.days, "DAYS"], [timeLeft.hours, "HRS"], [timeLeft.minutes, "MIN"], [timeLeft.seconds, "SEC"]] as const;
 
   return (
     <div className="countdown" aria-label="Time remaining until enrollment closes">
-      <strong>AUGUST COHORT</strong>
+      <strong>{cohortName || "NEXT COHORT"}</strong>
       <span className="countdown-label">ENROLLMENT CLOSES IN</span>
       <div className="countdown-units" aria-live="off">
         {units.map(([value, label]) => <span className="countdown-unit" key={label}><b>{String(value).padStart(2, "0")}</b><small>{label}</small></span>)}
       </div>
-      <span className="sr-only">Deadline: August 14, 2026 at 11:59 PM West Africa Time.</span>
+      <span className="sr-only">Deadline: {deadlineLabel}.</span>
     </div>
   );
 }
