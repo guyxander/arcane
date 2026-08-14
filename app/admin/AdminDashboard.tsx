@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { money } from "@/lib/pricing";
+import { formatWAT, toWATDateTimeLocal, watLocalToTimestamp } from "@/lib/time";
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Row = Record<string, any>;
 const tabs = [
@@ -81,6 +82,9 @@ export function AdminDashboard(props: {
     if (!db) return;
     setBusy(true);
     setMessage("");
+    if ((name === "add_slot" || name === "update_slot") && payload.starts_at) {
+      payload = { ...payload, starts_at: watLocalToTimestamp(payload.starts_at) };
+    }
     const scheduleAction = name === "update_slot" || name === "delete_slot";
     const { data, error } = await db.rpc(scheduleAction ? "admin_schedule_action" : "admin_dashboard_action", {
       p_action: name,
@@ -92,11 +96,6 @@ export function AdminDashboard(props: {
       router.refresh();
       return data;
     }
-  }
-  function localDateTime(value: string) {
-    const date = new Date(value);
-    const pad = (part: number) => String(part).padStart(2, "0");
-    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
   }
   async function signOut() {
     if (!db) return;
@@ -206,7 +205,7 @@ export function AdminDashboard(props: {
                 )}
                 <PushButton />
               </Panel>
-              <Panel title="Recent audit activity">{audit.length ? audit.slice(0, 8).map((item) => <div className="notice" key={item.id}><b>{item.action}</b><span>{item.entity_type} · {new Date(item.created_at).toLocaleString()}</span></div>) : <Empty text="No recorded changes yet." />}</Panel>
+              <Panel title="Recent audit activity">{audit.length ? audit.slice(0, 8).map((item) => <div className="notice" key={item.id}><b>{item.action}</b><span>{item.entity_type} · {formatWAT(item.created_at)}</span></div>) : <Empty text="No recorded changes yet." />}</Panel>
             </div>
           </>
         )}
@@ -308,6 +307,7 @@ export function AdminDashboard(props: {
         {tab === "Schedules" && (
           <>
             <Panel title="Create availability">
+              <p className="timezone-note">All schedule times use WAT (GMT+1).</p>
               <form
                 className="inline-form"
                 onSubmit={(e) => {
@@ -359,7 +359,7 @@ export function AdminDashboard(props: {
                       <option value="personal">Personal</option>
                       <option value="physical">Physical</option>
                     </select>
-                    <input name="starts_at" type="datetime-local" defaultValue={localDateTime(s.starts_at)} required />
+                    <input name="starts_at" type="datetime-local" defaultValue={toWATDateTimeLocal(s.starts_at)} required />
                     <input name="capacity" type="number" min={Math.max(1, s.enrolled_count)} defaultValue={s.capacity} required />
                     <div className="row-actions">
                       <button type="submit" disabled={busy}>Save changes</button>
@@ -371,7 +371,7 @@ export function AdminDashboard(props: {
                     <b>{s.cohort_name}<small>{s.is_active ? "Available" : "Unavailable"}</small></b>
                     <span>
                       {s.course} · {s.package_type} ·{" "}
-                      {new Date(s.starts_at).toLocaleString()} ·{" "}
+                      {formatWAT(s.starts_at)} ·{" "}
                       {s.enrolled_count}/{s.capacity}
                     </span>
                     <div className="row-actions">

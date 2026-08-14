@@ -10,6 +10,7 @@ import {
   Package,
   packages,
 } from "@/lib/pricing";
+import { formatWAT } from "@/lib/time";
 
 type PriceRow = {
   course: Course;
@@ -89,7 +90,7 @@ export function EnrollmentFlow({
         whatsapp: f.get("whatsapp"),
         preferredSlots: chosen.map(
           (s) =>
-            `${s.cohortName || "Class"} · ${new Date(s.startsAt).toLocaleString("en-NG", { dateStyle: "medium", timeStyle: "short" })}`,
+            `${s.cohortName || "Class"} · ${formatWAT(s.startsAt)}`,
         ),
         slotId: slotIds[0] || null,
         consent: f.get("consent") === "on",
@@ -229,10 +230,7 @@ export function EnrollmentFlow({
                       >
                         {s.cohortName || "Class"}
                         <span>
-                          {new Date(s.startsAt).toLocaleString("en-NG", {
-                            dateStyle: "medium",
-                            timeStyle: "short",
-                          })}
+                          {formatWAT(s.startsAt)}
                         </span>
                         <small>
                           {unavailable ? "Unavailable" : "Available"}

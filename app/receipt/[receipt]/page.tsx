@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { createPublicClient } from "@/lib/supabase/public";
 import { money } from "@/lib/pricing";
+import { formatWAT } from "@/lib/time";
 
 export const dynamic = "force-dynamic";
 
@@ -47,7 +48,7 @@ export default async function Receipt({
           </div>
           <div>
             <dt>Issued</dt>
-            <dd>{new Date(record.issued_at).toLocaleString("en-NG")}</dd>
+            <dd>{formatWAT(record.issued_at)}</dd>
           </div>
         </dl>
         <p className="print-note">

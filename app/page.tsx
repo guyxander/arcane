@@ -99,7 +99,7 @@ export default function Home() {
             <h3>AI WEBSITE<br />DEVELOPMENT</h3>
             <p>Plan, design and publish a database-powered website that works beautifully across devices.</p>
             <ul>
-              <li>August 15–29, 2026</li><li>Monday–Saturday</li><li>9:00–10:00 AM WAT</li><li>Laptop required</li>
+              <li>August 15–29, 2026</li><li>Monday–Saturday</li><li>9:00–10:00 AM WAT (GMT+1)</li><li>Laptop required</li>
             </ul>
             <div className="price"><small>GROUP LIVE</small><strong>₦45,000</strong></div>
             <a className="button full" href="/enroll">Choose your package <Arrow /></a>
@@ -112,7 +112,7 @@ export default function Home() {
             <h3>AI ANDROID APP<br />DEVELOPMENT</h3>
             <p>Shape, build and test a functional Android app on your own phone using AI-powered workflows.</p>
             <ul>
-              <li>August 15–29, 2026</li><li>Monday–Saturday</li><li>11:00 AM–12:00 PM WAT</li><li>Laptop + Android phone</li>
+              <li>August 15–29, 2026</li><li>Monday–Saturday</li><li>11:00 AM–12:00 PM WAT (GMT+1)</li><li>Laptop + Android phone</li>
             </ul>
             <div className="price"><small>GROUP LIVE</small><strong>₦60,000</strong></div>
             <a className="button full" href="/enroll">Choose your package <Arrow /></a>
@@ -208,7 +208,7 @@ export default function Home() {
 
       <section className="final-cta">
         <div className="shell">
-          <span className="kicker">ENROLLMENT CLOSES AUGUST 14 · 11:59 PM WAT</span>
+          <span className="kicker">ENROLLMENT CLOSES AUGUST 14 · 11:59 PM WAT (GMT+1)</span>
           <h2>YOUR IDEA IS<br />WAITING TO BE <em>BUILT.</em></h2>
           <p>Choose your course, learning package and preferred schedule. We’ll contact you to complete enrollment.</p>
           <div className="final-actions"><a className="button button-light" href="/enroll">Start enrollment <Arrow /></a></div>
